@@ -28,3 +28,9 @@ class Event(models.Model):
 
   def __str__(self) -> str:
     return self.title
+  
+  def display_attendees(self):
+    """Creating a string of attendees. This is required to display attendees in Admin."""
+    return ', '.join(user.username for user in self.attendees.all()[:3])
+  
+  display_attendees.short_description = 'Attendees'
