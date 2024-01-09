@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 # Create your models here.
 
 class Event(models.Model):
@@ -25,6 +26,9 @@ class Event(models.Model):
 
   created_at = models.DateTimeField(auto_now_add=True, help_text='When this event entry was created')
   updated_at = models.DateTimeField(auto_now=True, help_text='When the event entry was updated the last time')
+
+  def get_absolute_url(self):
+    return reverse('event-detail', args=[str(self.id)])
 
   def __str__(self) -> str:
     return self.title

@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Title: {{ event.title }}</h1>
+  <p>Details: {{ event.details }}</p>
+  <p>Date: {{ event.date }}</p>
+  <p>Location: {{ event.location }}</p>
+  <p>Attendees:</p>
+  {% for attendee in event.attendees.all %}
+    <p>{{ attendee.username }}</p>
+  {% endfor %}
+{% endblock %}

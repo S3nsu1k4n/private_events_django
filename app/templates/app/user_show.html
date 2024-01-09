@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>Created Events</h2>
+
+  {% if event_list %}
+  <ul>
+    {% for event in event_list %}
+      <li><a href="{% url 'event-detail' event.pk %}">{{ event.title }}</a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no books borrowed.</p>
+  {% endif %}
+{% endblock %}
