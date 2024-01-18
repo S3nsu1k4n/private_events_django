@@ -11,6 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Event
 # Create your views here.
 
+
 def index(request: HttpRequest) -> HttpResponse:
   events = Event.objects.all()
   context = {
@@ -18,8 +19,10 @@ def index(request: HttpRequest) -> HttpResponse:
   }
   return render(request, 'index.html', context=context)
 
+
 class EventDetailView(generic.DetailView):
   model = Event
+
 
 class EventCreateView(LoginRequiredMixin,  CreateView):
   model = Event
@@ -28,7 +31,10 @@ class EventCreateView(LoginRequiredMixin,  CreateView):
 
   def form_valid(self, form):
     form.instance.creator = self.request.user
+    self.object = form.save()
+    self.object.attendees.add(self.request.user)
     return super().form_valid(form)
+
 
 class UserShow(generic.ListView):
   model = Event
