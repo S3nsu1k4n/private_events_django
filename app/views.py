@@ -1,12 +1,14 @@
 from typing import Any
 from django.db.models.query import QuerySet
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.http import HttpRequest, HttpResponse
 from django.conf import settings
 from django.views import generic
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from datetime import datetime
 
 from .models import Event
 # Create your views here.
@@ -44,8 +46,23 @@ class UserShow(generic.ListView):
     user = self.request.user
     if user.is_anonymous:
       return {}
-
+    
     return {
       'event_list': Event.objects.filter(creator=user),
-      'attended_events_list': user.attended_events.all(),
+      'attended_upcoming_events_list': user.attended_events.filter(date__gte=datetime.now()),
+      'attended_past_events_list': user.attended_events.filter(date__lte=datetime.now()),
     }
+  
+
+def event_attend(request: HttpRequest, pk) -> HttpResponse:
+  event = Event.objects.get(pk=pk)
+  event.attendees.add(request.user)
+  return redirect('event-detail', pk=pk)
+  
+
+def event_unattend(request: HttpRequest, pk) -> HttpResponse:
+  if request.method == 'POST':
+    event = get_object_or_404(Event, pk=pk)
+    event.attendees.remove(request.user)
+  
+  return redirect('event-detail', pk=pk)
