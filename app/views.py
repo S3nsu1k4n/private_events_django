@@ -34,11 +34,12 @@ class UserShow(generic.ListView):
   model = Event
   template_name = 'app/user_show.html'
 
-  def get_queryset(self) -> QuerySet[Any]:
+  def get_context_data(self) -> QuerySet[Any]:
     user = self.request.user
     if user.is_anonymous:
-      return []
-    
-    return (
-      Event.objects.filter(creator=user)
-    )
+      return {}
+
+    return {
+      'event_list': Event.objects.filter(creator=user),
+      'attended_events_list': user.attended_events.all(),
+    }

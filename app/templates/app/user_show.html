@@ -10,6 +10,21 @@
     {% endfor %}
   </ul>
   {% else %}
-    <p>There are no books borrowed.</p>
+    <p>There are no created events.</p>
   {% endif %}
+  
+  <h2>Attended Events</h2>
+
+  {% if attended_events_list %}
+  <ul>
+    {% for event in attended_events_list %}
+      <li><a href="{% url 'event-detail' event.pk %}">{{ event.title }}</a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no attended events.</p>
+  {% endif %}
+
+
+  
 {% endblock %}
