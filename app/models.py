@@ -44,6 +44,9 @@ class Event(models.Model):
   def is_attendee(self, user: str) -> bool:
     return True if self.attendees.filter(username=user) else False
   
+  def is_creator(self, user: str) -> bool:
+    return True if self.creator == user else False
+
   @classmethod
   def past(self):
     return self.objects.filter(date__lte=datetime.now())

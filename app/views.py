@@ -1,12 +1,14 @@
 from typing import Any
 from django.db.models.query import QuerySet
+from django.http.response import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
 from django.conf import settings
 from django.views import generic
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 from datetime import datetime
 
@@ -28,10 +30,11 @@ class EventDetailView(generic.DetailView):
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
     context['user_is_attendee'] = self.object.is_attendee(self.request.user)
+    context['user_is_creator'] = self.object.is_creator(self.request.user)
     return context
 
 
-class EventCreateView(LoginRequiredMixin,  CreateView):
+class EventCreateView(LoginRequiredMixin, CreateView):
   model = Event
   fields = ['title', 'details', 'date', 'location']
   success_url = reverse_lazy('index')
@@ -42,6 +45,25 @@ class EventCreateView(LoginRequiredMixin,  CreateView):
     self.object.attendees.add(self.request.user)
     return super().form_valid(form)
 
+
+class EventUpdateView(LoginRequiredMixin, UpdateView):
+  model = Event
+  fields = ['title', 'details', 'date', 'location']
+  success_url = reverse_lazy('index')
+
+  def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+    event = self.get_object()
+    if request.user != event.creator:
+      return self.handle_no_permission()
+    return super().dispatch(request, *args, **kwargs)
+
+
+@login_required
+def event_delete(request: HttpRequest, pk: int) -> HttpResponse:
+  event = Event.objects.get(id=pk)
+  if event.creator == request.user:
+    event.delete()
+  return HttpResponseRedirect(reverse_lazy('index'))
 
 class UserShow(generic.ListView):
   model = Event

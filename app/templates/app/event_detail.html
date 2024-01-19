@@ -2,9 +2,31 @@
 
 {% block content %}
   <h1>Title: {{ event.title }}</h1>
+  <p>Creator: {{ event.creator }}</p>
   <p>Details: {{ event.details }}</p>
   <p>Date: {{ event.date }}</p>
   <p>Location: {{ event.location }}</p>
+
+
+  {% if user_is_creator %}
+  <div>
+    <div class="edit-form">
+      <form action="{% url 'event-update' pk=event.pk %}" method="get">
+          {% csrf_token %}
+          <input type="submit" value="Edit" class="edit-button">
+      </form>
+    </div>
+  </div>
+
+  <div>
+    <div class="delete-form">
+      <form action="{% url 'event-delete' pk=event.pk %}" method="get">
+          {% csrf_token %}
+          <input type="submit" value="Delete" class="delete-button">
+      </form>
+    </div>
+  </div>
+  {% endif %}
 
   {% if user_is_attendee %}
     <div class="unattend-form">
