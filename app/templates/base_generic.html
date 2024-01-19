@@ -10,14 +10,14 @@
 <body>
   <h1>Private Events!</h1>
   <nav>
-    <ul>
-      <li><a class="nav-button" href="{% url 'index' %}">Events</a></li>
+    <ul class="generic-button-flex">
+      <li><a class="generic-button" href="{% url 'index' %}">Events</a></li>
       {% if user.is_authenticated %}
-        <li><a class="nav-button" href="{% url 'myevents' %}">MyEvents</a></li>
-        <li><a class="nav-button" href="{% url 'event_create' %}">Create new event</a></li>
-        <li><a class="nav-button" href="{% url 'logout' %}">Logout</a></li>
+        <li><a class="generic-button" href="{% url 'myevents' %}">MyEvents</a></li>
+        <li><a class="generic-button" href="{% url 'event_create' %}">Create new event</a></li>
+        <li><a class="generic-button" href="{% url 'logout' %}">Logout</a></li>
       {% else %}
-        <li><a class="nav-button" href="{% url 'login' %}">Login</a></li>
+        <li><a class="generic-button" href="{% url 'login' %}">Login</a></li>
       {% endif %}
       </ul>
   </nav>

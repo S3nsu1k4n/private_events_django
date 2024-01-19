@@ -2,7 +2,7 @@ body {
   margin: 50px;
 }
 
-nav ul {
+.generic-button-flex {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -19,14 +19,15 @@ nav ul li {
   padding-bottom: 30px;
 }
 
-.nav-button {
+.generic-button {
   color: black;
+  background-color: white;
   text-decoration: none;
   border: solid 2px;
   padding: 20px;
 }
 
-.nav-button:hover {
+.generic-button:hover {
   background-color: lightblue;
 }
 
@@ -50,4 +51,28 @@ nav ul li {
 .event-title {
   font-weight: 600;
   font-size: large;
+}
+
+.event-info h1 {
+  border: solid 2px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.event-description {
+  display: flex;
+  flex-direction: column;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.event-description {
+  border: solid 2px;
+  border-radius: 25px;
+  padding: 10px;
+  margin-bottom: 30px;
+}
+
+.attendees {
+  
 }

@@ -1,55 +1,58 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+<div class="event-info">
   <h1>Title: {{ event.title }}</h1>
-  <p>Creator: {{ event.creator }}</p>
-  <p>Details: {{ event.details }}</p>
-  <p>Date: {{ event.date }}</p>
-  <p>Location: {{ event.location }}</p>
-
-
-  {% if user.is_authenticated %}
+  <div class="event-description">
+    <p>Creator: {{ event.creator }}</p>
+    <p>Details: {{ event.details }}</p>
+    <p>Date: {{ event.date }}</p>
+    <p>Location: {{ event.location }}</p>
+  </div>
+</div>
+  
+  <div class="generic-button-flex">
+    {% if user.is_authenticated %}
     {% if user_is_creator %}
-    <div>
-      <div class="edit-form">
-        <form action="{% url 'event-update' pk=event.pk %}" method="get">
-            {% csrf_token %}
-            <input type="submit" value="Edit" class="edit-button">
-        </form>
-      </div>
+    <div class="edit-form">
+      <form action="{% url 'event-update' pk=event.pk %}" method="get">
+        {% csrf_token %}
+        <input type="submit" value="Edit" class="generic-button">
+      </form>
     </div>
-
-    <div>
-      <div class="delete-form">
-        <form action="{% url 'event-delete' pk=event.pk %}" method="get">
-            {% csrf_token %}
-            <input type="submit" value="Delete" class="delete-button">
-        </form>
-      </div>
+    
+    <div class="delete-form">
+      <form action="{% url 'event-delete' pk=event.pk %}" method="get">
+        {% csrf_token %}
+        <input type="submit" value="Delete" class="generic-button">
+      </form>
     </div>
     {% endif %}
-
+    
     {% if user_is_attendee %}
-      <div class="unattend-form">
-        <form action="{% url 'event-unattend' pk=event.pk %}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Unattend" class="unattend-button">
+    <div class="unattend-form">
+      <form action="{% url 'event-unattend' pk=event.pk %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Unattend" class="generic-button">
         </form>
       </div>
-    {% else %}
+      {% else %}
       <div class="attend-form">
         <form action="{% url 'event-attend' pk=event.pk %}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Attend" class="attend-button">
+          {% csrf_token %}
+          <input type="submit" value="Attend" class="generic-button">
         </form>
       </div>
-    {% endif %}
-  {% endif %}
-
+      {% endif %}
+      {% endif %}
+    </div>
+      
   
-  <p>Attendees:</p>
-  {% for attendee in event.attendees.all %}
-    <p>{{ attendee.username }}</p>
-  {% endfor %}
+  <h2>Attendees:</h2>
+  <div class="attendees">
+    {% for attendee in event.attendees.all %}
+      <p>{{ attendee.username }}</p>
+    {% endfor %}
+  </div>
 
 {% endblock %}
