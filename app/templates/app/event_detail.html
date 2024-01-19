@@ -8,40 +8,42 @@
   <p>Location: {{ event.location }}</p>
 
 
-  {% if user_is_creator %}
-  <div>
-    <div class="edit-form">
-      <form action="{% url 'event-update' pk=event.pk %}" method="get">
-          {% csrf_token %}
-          <input type="submit" value="Edit" class="edit-button">
-      </form>
+  {% if user.is_authenticated %}
+    {% if user_is_creator %}
+    <div>
+      <div class="edit-form">
+        <form action="{% url 'event-update' pk=event.pk %}" method="get">
+            {% csrf_token %}
+            <input type="submit" value="Edit" class="edit-button">
+        </form>
+      </div>
     </div>
-  </div>
 
-  <div>
-    <div class="delete-form">
-      <form action="{% url 'event-delete' pk=event.pk %}" method="get">
-          {% csrf_token %}
-          <input type="submit" value="Delete" class="delete-button">
-      </form>
+    <div>
+      <div class="delete-form">
+        <form action="{% url 'event-delete' pk=event.pk %}" method="get">
+            {% csrf_token %}
+            <input type="submit" value="Delete" class="delete-button">
+        </form>
+      </div>
     </div>
-  </div>
-  {% endif %}
+    {% endif %}
 
-  {% if user_is_attendee %}
-    <div class="unattend-form">
-      <form action="{% url 'event-unattend' pk=event.pk %}" method="post">
-          {% csrf_token %}
-          <input type="submit" value="Unattend" class="unattend-button">
-      </form>
-    </div>
-  {% else %}
-    <div class="attend-form">
-      <form action="{% url 'event-attend' pk=event.pk %}" method="post">
-          {% csrf_token %}
-          <input type="submit" value="Attend" class="attend-button">
-      </form>
-    </div>
+    {% if user_is_attendee %}
+      <div class="unattend-form">
+        <form action="{% url 'event-unattend' pk=event.pk %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Unattend" class="unattend-button">
+        </form>
+      </div>
+    {% else %}
+      <div class="attend-form">
+        <form action="{% url 'event-attend' pk=event.pk %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Attend" class="attend-button">
+        </form>
+      </div>
+    {% endif %}
   {% endif %}
 
   

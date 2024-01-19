@@ -3,7 +3,7 @@ from django.db.models.query import QuerySet
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.conf import settings
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView
@@ -65,31 +65,37 @@ def event_delete(request: HttpRequest, pk: int) -> HttpResponse:
     event.delete()
   return HttpResponseRedirect(reverse_lazy('index'))
 
-class UserShow(generic.ListView):
+  
+
+def event_attend(request: HttpRequest, pk) -> HttpResponse:
+  if request.user.is_authenticated:
+    event = Event.objects.get(pk=pk)
+    event.attendees.add(request.user)
+    return redirect('event-detail', pk=pk)
+  else:
+    return HttpResponseForbidden('403 Forbidden')
+  
+
+def event_unattend(request: HttpRequest, pk) -> HttpResponse:
+  if request.user.is_authenticated:
+    if request.method == 'POST':
+      event = get_object_or_404(Event, pk=pk)
+      event.attendees.remove(request.user)
+  
+    return redirect('event-detail', pk=pk)
+  else:
+    return redirect('index')
+
+
+class UserShow(LoginRequiredMixin, generic.ListView):
   model = Event
   template_name = 'app/user_show.html'
 
   def get_context_data(self) -> QuerySet[Any]:
     user = self.request.user
-    if user.is_anonymous:
-      return {}
 
     return {
       'event_list': Event.objects.filter(creator=user),
       'attended_upcoming_events_list': user.attended_events.filter(date__gte=datetime.now()),
       'attended_past_events_list': user.attended_events.filter(date__lte=datetime.now()),
     }
-  
-
-def event_attend(request: HttpRequest, pk) -> HttpResponse:
-  event = Event.objects.get(pk=pk)
-  event.attendees.add(request.user)
-  return redirect('event-detail', pk=pk)
-  
-
-def event_unattend(request: HttpRequest, pk) -> HttpResponse:
-  if request.method == 'POST':
-    event = get_object_or_404(Event, pk=pk)
-    event.attendees.remove(request.user)
-  
-  return redirect('event-detail', pk=pk)

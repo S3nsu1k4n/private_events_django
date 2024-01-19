@@ -11,10 +11,15 @@
   <h1>Private Events!</h1>
   <nav>
     <ul>
-      <li><a href="{% url 'index' %}">Events</a></li>
-      <li><a href="{% url 'myevents' %}">MyEvents</a></li>
-      <li><a href="{% url 'event_create' %}">Create new event</a></li>
-    </ul>
+      <li><a class="nav-button" href="{% url 'index' %}">Events</a></li>
+      {% if user.is_authenticated %}
+        <li><a class="nav-button" href="{% url 'myevents' %}">MyEvents</a></li>
+        <li><a class="nav-button" href="{% url 'event_create' %}">Create new event</a></li>
+        <li><a class="nav-button" href="{% url 'logout' %}">Logout</a></li>
+      {% else %}
+        <li><a class="nav-button" href="{% url 'login' %}">Login</a></li>
+      {% endif %}
+      </ul>
   </nav>
   {% block content %}{% endblock %}
 </body>
