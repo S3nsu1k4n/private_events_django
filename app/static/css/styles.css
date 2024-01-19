@@ -29,3 +29,25 @@ nav ul li {
 .nav-button:hover {
   background-color: lightblue;
 }
+
+.events {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.event {
+  text-decoration: none;
+  color: black;
+  border: solid 2px;
+  padding: 20px;
+}
+
+.event:hover {
+  background-color: lightgray;
+}
+
+.event-title {
+  font-weight: 600;
+  font-size: large;
+}

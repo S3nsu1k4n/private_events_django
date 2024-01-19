@@ -3,15 +3,23 @@
 {% block content %}
 
   <h2>Upcoming Events</h2>
-  {% for event in future_events %}
-    <p>{{ event.date }}</p>
-    <li><a href="{% url 'event-detail' event.pk %}">{{ event.title }}</a></li>
-  {% endfor %}
-
+  <div class="events">
+    {% for event in future_events %}
+      <a href="{% url 'event-detail' event.pk %}" class="event">
+        <p class="event-title">{{ event.title }}</p>
+        <p>{{ event.date }}</p>
+    </a>
+    {% endfor %}
+  </div>
+    
   <h2>Past Events</h2>
-  {% for event in past_events %}
-    <p>{{ event.date }}</p>
-    <li><a href="{% url 'event-detail' event.pk %}">{{ event.title }}</a></li>
-  {% endfor %}
-
+  <div class="events">
+    {% for event in past_events %}
+    <a href="{% url 'event-detail' event.pk %}" class="event">
+        <p class="event-title">{{ event.title }}</p>
+        <p>{{ event.date }}</p>
+    </a>
+    {% endfor %}
+  </div>
+    
 {% endblock %}
