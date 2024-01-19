@@ -15,15 +15,20 @@ from .models import Event
 
 
 def index(request: HttpRequest) -> HttpResponse:
-  events = Event.objects.all()
   context = {
-    'events': events,
+    'future_events': Event.future().all(),
+    'past_events': Event.past().all(),
   }
   return render(request, 'index.html', context=context)
 
 
 class EventDetailView(generic.DetailView):
   model = Event
+
+  def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    context = super().get_context_data(**kwargs)
+    context['user_is_attendee'] = self.object.is_attendee(self.request.user)
+    return context
 
 
 class EventCreateView(LoginRequiredMixin,  CreateView):
@@ -46,7 +51,7 @@ class UserShow(generic.ListView):
     user = self.request.user
     if user.is_anonymous:
       return {}
-    
+
     return {
       'event_list': Event.objects.filter(creator=user),
       'attended_upcoming_events_list': user.attended_events.filter(date__gte=datetime.now()),

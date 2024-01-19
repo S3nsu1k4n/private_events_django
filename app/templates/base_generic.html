@@ -7,6 +7,13 @@
 </head>
 <body>
   <h1>Private Events!</h1>
+  <nav>
+    <ul>
+      <li><a href="{% url 'index' %}">Events</a></li>
+      <li><a href="{% url 'myevents' %}">MyEvents</a></li>
+      <li><a href="{% url 'event_create' %}">Create new event</a></li>
+    </ul>
+  </nav>
   {% block content %}{% endblock %}
 </body>
 </html>

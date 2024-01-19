@@ -1,9 +1,17 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  {% for event in events %}
-  <p>{{ event.date }}</p>
-  <li><a href="{% url 'event-detail' event.pk %}">{{ event.title }}</a></li>
-  
+
+  <h2>Upcoming Events</h2>
+  {% for event in future_events %}
+    <p>{{ event.date }}</p>
+    <li><a href="{% url 'event-detail' event.pk %}">{{ event.title }}</a></li>
   {% endfor %}
+
+  <h2>Past Events</h2>
+  {% for event in past_events %}
+    <p>{{ event.date }}</p>
+    <li><a href="{% url 'event-detail' event.pk %}">{{ event.title }}</a></li>
+  {% endfor %}
+
 {% endblock %}

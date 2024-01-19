@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
+
+from datetime import datetime
 # Create your models here.
 
 class Event(models.Model):
@@ -38,3 +40,14 @@ class Event(models.Model):
     return ', '.join(user.username for user in self.attendees.all()[:3])
   
   display_attendees.short_description = 'Attendees'
+
+  def is_attendee(self, user: str) -> bool:
+    return True if self.attendees.filter(username=user) else False
+  
+  @classmethod
+  def past(self):
+    return self.objects.filter(date__lte=datetime.now())
+
+  @classmethod
+  def future(self):
+    return self.objects.filter(date__gte=datetime.now())

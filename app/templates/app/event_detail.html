@@ -6,23 +6,26 @@
   <p>Date: {{ event.date }}</p>
   <p>Location: {{ event.location }}</p>
 
-  <div class="unattend-form">
-    <form action="{% url 'event-attend' pk=event.pk %}" method="post">
-        {% csrf_token %}
-        <input type="submit" value="Attend" class="attend-button">
-    </form>
-  </div>
+  {% if user_is_attendee %}
+    <div class="unattend-form">
+      <form action="{% url 'event-unattend' pk=event.pk %}" method="post">
+          {% csrf_token %}
+          <input type="submit" value="Unattend" class="unattend-button">
+      </form>
+    </div>
+  {% else %}
+    <div class="attend-form">
+      <form action="{% url 'event-attend' pk=event.pk %}" method="post">
+          {% csrf_token %}
+          <input type="submit" value="Attend" class="attend-button">
+      </form>
+    </div>
+  {% endif %}
+
   
   <p>Attendees:</p>
   {% for attendee in event.attendees.all %}
     <p>{{ attendee.username }}</p>
-    {% if user.username == attendee.username %}
-      <div class="unattend-form">
-        <form action="{% url 'event-unattend' pk=event.pk %}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Unattend" class="unattend-button">
-        </form>
-      </div>
-    {% endif %}
   {% endfor %}
+
 {% endblock %}
