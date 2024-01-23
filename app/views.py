@@ -51,11 +51,11 @@ class EventUpdateView(LoginRequiredMixin, UpdateView):
   fields = ['title', 'details', 'date', 'location']
   success_url = reverse_lazy('index')
 
-  def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+  def get_success_url(self) -> str:
     event = self.get_object()
-    if request.user != event.creator:
-      return self.handle_no_permission()
-    return super().dispatch(request, *args, **kwargs)
+    if self.request.user == event.creator:
+      return reverse('index')
+    return reverse('permission_denied')
 
 
 @login_required
@@ -69,8 +69,9 @@ def event_delete(request: HttpRequest, pk: int) -> HttpResponse:
 
 def event_attend(request: HttpRequest, pk) -> HttpResponse:
   if request.user.is_authenticated:
-    event = Event.objects.get(pk=pk)
-    event.attendees.add(request.user)
+    if request.method == 'POST':
+      event = get_object_or_404(Event, pk=pk)
+      event.attendees.add(request.user)
     return redirect('event-detail', pk=pk)
   else:
     return HttpResponseForbidden('403 Forbidden')
@@ -84,7 +85,7 @@ def event_unattend(request: HttpRequest, pk) -> HttpResponse:
   
     return redirect('event-detail', pk=pk)
   else:
-    return redirect('index')
+    return HttpResponseForbidden('403 Forbidden')
 
 
 class UserShow(LoginRequiredMixin, generic.ListView):
