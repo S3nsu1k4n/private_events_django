@@ -53,15 +53,26 @@ Testing files can be found inside management/tests/
 # Pages
 <details>
   <summary>Open</summary>
-  
+    
   ## 1. Index (logged out)
-  <img src="./docs/img/index_logged_out.JPG" height=450>
+  <img src="./doc/images/index.JPG" height=450>
 
   ## 2. Index (logged in)
+  <img src="./doc/images/index_logged_in.JPG" height=450>
 
-  ## 3. Login
+  ## 3. Event detail (logged out)
+  <img src="./doc/images/event_detail.JPG" height=450>
 
-  ## 4. New Post
+  ## 4. Event detail (logged in)
+  <img src="./doc/images/event_detail_logged_in.JPG" height=450>
 
+  ## 5. Login
+  <img src="./doc/images/login.JPG" height=450>
+
+  ## 6. MyEvents
+  <img src="./doc/images/myevents.JPG" height=450>
+
+  ## 7. Event create / edit
+  <img src="./doc/images/event_create_edit.JPG" height=450>
 
 </details>
